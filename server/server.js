@@ -12,17 +12,18 @@ import path from "path";
 
 dotenv.config();
 connectDatabase();
+
 const app = express();
 app.use(express.json());
 
 // Serve static files from the 'client frontend/public' directory
-app.use(express.static(path.join(path.resolve(), "client frontend", "public")));
+app.use(express.static(path.join(path.resolve(), "client frontend", "build")));
 
 // Handle other routes
 app.get("*", (req, res, next) => {
   if (req.originalUrl.startsWith("/api")) return next();
   res.sendFile(
-    path.join(path.resolve(), "client frontend", "public", "index.html")
+    path.join(path.resolve(), "client frontend", "build", "index.html")
   );
 });
 
@@ -33,6 +34,7 @@ app.use("/api/discount", discountRoute);
 app.use("/api/categories", categoriesRoute);
 app.use("/api/users", userRouter);
 app.use("/api/orders", orderRouter);
+
 app.get("/api/config/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID);
 });
@@ -43,4 +45,4 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, console.log(`server run in port ${PORT}`));
+app.listen(PORT, console.log(`Server running in port ${PORT}`));
