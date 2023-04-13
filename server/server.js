@@ -15,13 +15,15 @@ connectDatabase();
 const app = express();
 app.use(express.json());
 
-// Serve static files from the 'client frontend' directory
-app.use(express.static(path.join(path.resolve(), "client frontend")));
+// Serve static files from the 'client frontend/public' directory
+app.use(express.static(path.join(path.resolve(), "client frontend", "public")));
 
 // Handle other routes
 app.get("*", (req, res, next) => {
   if (req.originalUrl.startsWith("/api")) return next();
-  res.sendFile(path.join(path.resolve(), "client frontend", "index.html"));
+  res.sendFile(
+    path.join(path.resolve(), "client frontend", "public", "index.html")
+  );
 });
 
 // API
