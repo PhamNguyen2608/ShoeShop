@@ -8,11 +8,21 @@ import userRouter from "./Routes/UserRoutes.js";
 import orderRouter from "./Routes/orderRoutes.js";
 import discountRoute from "./Routes/discountRoutes.js";
 import categoriesRoute from "./Routes/categoriesRoutes.js";
+import path from "path";
 
 dotenv.config();
 connectDatabase();
 const app = express();
 app.use(express.json());
+
+// Serve static files from the 'client' directory
+app.use(express.static(path.join(__dirname, "..", "client frontend")));
+
+// Handle other routes
+app.get("*", (req, res, next) => {
+  if (req.originalUrl.startsWith("/api")) return next();
+  res.sendFile(path.join(__dirname, "..", "client frontend", "index.html"));
+});
 
 // API
 app.use("/api/import", ImportData);
